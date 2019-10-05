@@ -1,10 +1,37 @@
 // Dependencies
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const stringDecoder = require('string_decoder').StringDecoder;
+const config = require('./config');
+const fs = require('fs');
 
-// Set Server Response
-const server = http.createServer((req, res) => {
+// instantite the http server
+const httpServer = http.createServer((req, res) => {
+    unifiedServer(req, res);
+});
+
+// Start http Server 
+httpServer.listen(config.httpPort, () => {
+    console.log('server:: run on port ' + config.httpPort);
+});
+
+// instantite the https server
+const httpsServerOPtions = {
+    key: fs.readFileSync('./https/key.pem'),
+    cert: fs.readFileSync('./https/cert.pem'),
+};
+const httpsServer = https.createServer(httpsServerOPtions, (req, res) => {
+    unifiedServer(req, res);
+});
+
+// Start https Server 
+httpsServer.listen(config.httpsPort, () => {
+    console.log('server:: run on port ' + config.httpsPort);
+});
+
+// all the server logic both http and https server
+const unifiedServer = (req, res) => {
     // get url and parse it
     const parsedUrl = url.parse(req.url, true);
 
@@ -55,6 +82,7 @@ const server = http.createServer((req, res) => {
             const payloadString = JSON.stringify(payload);
 
             // send response
+            res.setHeader('Content-Type', 'application/json');
             res.writeHead(statusCode);
             res.end(payloadString);
 
@@ -62,12 +90,7 @@ const server = http.createServer((req, res) => {
             console.log('Response:', statusCode, payloadString);
         });
     });
-});
-
-// Start Server 
-server.listen(80, () => {
-    console.log('server:: run on port 80.');
-});
+}
 
 // handlers
 const handlers = {};
