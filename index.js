@@ -95,9 +95,9 @@ const unifiedServer = (req, res) => {
 // handlers
 const handlers = {};
 
-handlers.sample = (data, callback) => {
+handlers.status = (data, callback) => {
     // callback a http status code, and a payload object
-    callback(406, { name: 'sample handler' });
+    callback(200);
 };
 
 handlers.nofound = (data, callback) => {
@@ -106,5 +106,5 @@ handlers.nofound = (data, callback) => {
 
 // router
 const router = {
-    'sample': handlers.sample,
+    'status': handlers.status,
 };
