@@ -8,6 +8,10 @@ const fs = require('fs');
 const handlers = require('./lib/handlers');
 const helpers = require('./lib/helpers');
 
+helpers.sendSms('928163623', 'Test', (err) => {
+    console.error(err);
+});
+
 // instantite the http server
 const httpServer = http.createServer((req, res) => {
     unifiedServer(req, res);
