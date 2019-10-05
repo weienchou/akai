@@ -99,4 +99,5 @@ const router = {
     'status': handlers.status,
     'users': handlers.users,
     'tokens': handlers.tokens,
+    checks: handlers.checks,
 };
